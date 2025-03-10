@@ -14,7 +14,7 @@ DOWNLOAD_PATH+="/targets/$(echo "$TARGET" | tr "-" "/")"
 function verify_shasum(){
 	[ -n "$1" ] || exit 1
 	curl -A "$CURL_UA" --retry 3 --retry-all-errors --retry-delay 10 -fsSL "$DOWNLOAD_URL/$DOWNLOAD_PATH/sha256sums" | grep "$1" > "$1.sha256sums"
-	LOCAL_HASH="$(sha256sum $1 | awk '{print $1}')"
+	LOCAL_HASH="$(sha256sum "$1" | awk '{print $1}')"
 	REMOTE_HASH="$(awk '{print $1}' "$1.sha256sums")"
 	if [ "$LOCAL_HASH" == "$REMOTE_HASH" ]; then
 		echo -e "sha256sums checked."
