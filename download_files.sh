@@ -30,14 +30,18 @@ function verify_shasum(){
 case "$1" in
 "ib")
 	IB_NAME="$(curl -A "$CURL_UA" -fsSL "$DOWNLOAD_URL/$DOWNLOAD_PATH/sha256sums" | grep -E "imagebuilder-(.*)${TARGET%-*}" | cut -d "*" -f 2)"
-	curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$IB_NAME"
+    if [[ ! -f $IB_NAME ]]; then
+	    curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$IB_NAME"
+    fi
 	verify_shasum "$IB_NAME"
 	mkdir -p "ib"
 	tar -vxf "$IB_NAME" -C "ib"/ --strip-components 1
 	;;
 "rootfs")
 	ROOTFS_NAME="$(curl -A "$CURL_UA" -fsSL "$DOWNLOAD_URL/$DOWNLOAD_PATH/sha256sums" | grep "\-rootfs.tar.gz" | cut -d "*" -f 2)"
-	curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$ROOTFS_NAME"
+    if [[ ! -f $ROOTFS_NAME ]]; then
+	    curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$ROOTFS_NAME"
+    fi
 	verify_shasum "$ROOTFS_NAME"
 	mkdir -p "rootfs"
 	tar -vxf "$ROOTFS_NAME" -C "rootfs"/ --strip-components 1
@@ -45,7 +49,9 @@ case "$1" in
 	;;
 "sdk")
 	SDK_NAME="$(curl -A "$CURL_UA" -fsSL "$DOWNLOAD_URL/$DOWNLOAD_PATH/sha256sums" | grep -E "sdk-(.*)${TARGET%-*}" | cut -d "*" -f 2)"
-	curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$SDK_NAME"
+    if [[ ! -f $SDK_NAME ]]; then
+	    curl --retry 3 --retry-all-errors --retry-delay 10 -A "$CURL_UA" -fLO "$DOWNLOAD_URL/$DOWNLOAD_PATH/$SDK_NAME"
+    fi
 	verify_shasum "$SDK_NAME"
 	mkdir -p "sdk"
 	tar -vxf "$SDK_NAME" -C "sdk"/ --strip-components 1

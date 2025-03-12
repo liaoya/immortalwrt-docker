@@ -1,0 +1,5 @@
+ib/
+sdk/
+*.sha256sums
+*.xz
+*.zst
