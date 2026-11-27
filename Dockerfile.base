@@ -1,6 +1,7 @@
 FROM debian:11
 
-RUN apt-get update -qq && \
+RUN printf '%s\n' 'deb https://deb.freexian.com/extended-lts bullseye main' > /etc/apt/sources.list && \
+    apt-get update -qq && \
     apt-get install -y \
         build-essential \
         ccache \
